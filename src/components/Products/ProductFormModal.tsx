@@ -29,9 +29,9 @@ const { Text } = Typography
 // ─── Zod Schema ──────────────────────────────────────────────────────────────
 const productSchema = z.object({
   name: z.string().min(1, 'Tên sản phẩm không được để trống'),
-  price: z.number({ invalid_type_error: 'Nhập giá bán' }).min(0, 'Giá không hợp lệ'),
+  price: z.number({ message: 'Nhập giá bán' }).min(0, 'Giá không hợp lệ'),
   cost_price: z.number().min(0).nullable().optional(),
-  quantity: z.number({ invalid_type_error: 'Nhập số lượng' }).min(0, 'Số lượng không hợp lệ'), // Hỗ trợ số thập phân (bỏ .int())
+  quantity: z.number({ message: 'Nhập số lượng' }).min(0, 'Số lượng không hợp lệ'), // Hỗ trợ số thập phân (bỏ .int())
   category: z.string().min(1, 'Chọn danh mục'),
   unit: z.string().min(1, 'Chọn hoặc nhập đơn vị tính'),
   barcode: z.string().nullable().optional(),

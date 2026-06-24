@@ -8,11 +8,11 @@ import {
   Tag,
   Spin,
   Empty,
-  Badge,
   Tabs,
   Modal,
   Button,
 } from 'antd'
+import type { InputRef } from 'antd'
 import { SearchOutlined, BarcodeOutlined } from '@ant-design/icons'
 import { useProducts } from '../../hooks/useProducts'
 import { useCartStore } from '../../stores/cartStore'
@@ -28,7 +28,7 @@ export function ProductSearchPanel() {
   const [selectedProductForUnit, setSelectedProductForUnit] = useState<Product | null>(null)
   const { data: products = [], isLoading } = useProducts(search, category)
   const addToCart = useCartStore((s) => s.addToCart)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<InputRef>(null)
 
   // Auto-focus on mount
   useEffect(() => {
@@ -159,7 +159,7 @@ export function ProductSearchPanel() {
                   >
                     {product.name}
                   </Text>
-                  <div style={{ marginTop: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center', wrap: 'wrap', gap: 4 }}>
+                  <div style={{ marginTop: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 4 }}>
                     <Text style={{ color: '#1677ff', fontWeight: 600, fontSize: 13 }}>
                       {formatCurrency(product.price)}
                     </Text>
