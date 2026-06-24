@@ -83,7 +83,7 @@ export function OrderDetailModal({ orderId, onClose }: OrderDetailModalProps) {
             rowKey="id"
             pagination={false}
             size="small"
-            scroll={{ y: 300 }}
+            scroll={{ x: 500, y: 300 }}
           />
 
           <Divider style={{ margin: '16px 0 12px 0' }} />

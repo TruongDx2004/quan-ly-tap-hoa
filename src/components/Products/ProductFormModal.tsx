@@ -363,9 +363,9 @@ export function ProductFormModal({ open, onClose, product }: ProductFormModalPro
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {subUnits.map((u, idx) => (
-                <Row gutter={8} key={idx} align="middle">
+                <Row gutter={[8, 8]} key={idx} align="middle" style={{ borderBottom: '1px dashed #f0f0f0', paddingBottom: 8, marginBottom: 4 }}>
                   {/* Tên đơn vị */}
-                  <Col span={5}>
+                  <Col xs={12} sm={5}>
                     <Select
                       value={u.unit_name || undefined}
                       onChange={(val) => handleSubUnitChange(idx, 'unit_name', val)}
@@ -376,7 +376,7 @@ export function ProductFormModal({ open, onClose, product }: ProductFormModalPro
                     />
                   </Col>
                   {/* Hệ số */}
-                  <Col span={5}>
+                  <Col xs={12} sm={5}>
                     <InputNumber
                       value={u.ratio}
                       onChange={(val) => handleSubUnitChange(idx, 'ratio', val ?? 1)}
@@ -386,7 +386,7 @@ export function ProductFormModal({ open, onClose, product }: ProductFormModalPro
                     />
                   </Col>
                   {/* Giá bán */}
-                  <Col span={6}>
+                  <Col xs={11} sm={6}>
                     <InputNumber
                       value={u.price}
                       onChange={(val) => handleSubUnitChange(idx, 'price', val ?? 0)}
@@ -398,7 +398,7 @@ export function ProductFormModal({ open, onClose, product }: ProductFormModalPro
                     />
                   </Col>
                   {/* Barcode phụ */}
-                  <Col span={6}>
+                  <Col xs={11} sm={6}>
                     <Input
                       value={u.barcode || ''}
                       onChange={(e) => handleSubUnitChange(idx, 'barcode', e.target.value || null)}
@@ -407,7 +407,7 @@ export function ProductFormModal({ open, onClose, product }: ProductFormModalPro
                     />
                   </Col>
                   {/* Xóa */}
-                  <Col span={2} style={{ textAlign: 'right' }}>
+                  <Col xs={2} sm={2} style={{ textAlign: 'right' }}>
                     <Button
                       type="text"
                       danger

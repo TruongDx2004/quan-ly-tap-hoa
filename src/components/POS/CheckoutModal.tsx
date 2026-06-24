@@ -1,4 +1,4 @@
-import { Modal, Table, Typography, Space, Tag, Divider, Input } from 'antd'
+import { Modal, Table, Typography, Space, Tag, Divider, Input, Grid } from 'antd'
 import { CheckCircleOutlined } from '@ant-design/icons'
 import { useCartStore, selectCartTotal } from '../../stores/cartStore'
 import { useCreateOrder } from '../../hooks/useOrders'
@@ -18,6 +18,9 @@ export function CheckoutModal({ open, onClose }: CheckoutModalProps) {
   const total = useCartStore(selectCartTotal)
   const createOrder = useCreateOrder()
   const [note, setNote] = useState('')
+
+  const screens = Grid.useBreakpoint()
+  const isMobile = screens.md === false
 
   const handleConfirm = async () => {
     await createOrder.mutateAsync({ items, note: note.trim() || undefined })
@@ -48,24 +51,25 @@ export function CheckoutModal({ open, onClose }: CheckoutModalProps) {
       title: 'SL',
       dataIndex: 'qty',
       key: 'qty',
-      width: 90,
+      width: isMobile ? 70 : 90,
       align: 'center' as const,
       render: (qty: number, record: CheckoutTableItem) => (
         <Text>{qty % 1 === 0 ? qty : qty.toFixed(2)} {record.unit}</Text>
       ),
     },
-    {
+    ...(!isMobile ? [{
       title: 'Đơn giá',
       dataIndex: 'price',
       key: 'price',
       width: 110,
       render: (v: number) => <Text>{formatCurrency(v)}</Text>,
-    },
+    }] : []),
     {
       title: 'Thành tiền',
       dataIndex: 'sub',
       key: 'sub',
-      width: 120,
+      width: isMobile ? 90 : 120,
+      align: 'right' as const,
       render: (v: number) => (
         <Text strong style={{ color: '#1677ff' }}>
           {formatCurrency(v)}

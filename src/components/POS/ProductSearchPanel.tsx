@@ -11,6 +11,7 @@ import {
   Tabs,
   Modal,
   Button,
+  Grid,
 } from 'antd'
 import type { InputRef } from 'antd'
 import { SearchOutlined, BarcodeOutlined } from '@ant-design/icons'
@@ -29,6 +30,9 @@ export function ProductSearchPanel() {
   const { data: products = [], isLoading } = useProducts(search, category)
   const addToCart = useCartStore((s) => s.addToCart)
   const inputRef = useRef<InputRef>(null)
+  
+  const screens = Grid.useBreakpoint()
+  const isMobile = screens.md === false
 
   // Auto-focus on mount
   useEffect(() => {
@@ -95,7 +99,7 @@ export function ProductSearchPanel() {
       {/* Search Bar */}
       <Input
         ref={inputRef}
-        size="large"
+        size={isMobile ? undefined : 'large'}
         prefix={<SearchOutlined />}
         suffix={<BarcodeOutlined style={{ color: '#aaa' }} />}
         placeholder="Tìm tên hoặc quét barcode, nhấn Enter..."
@@ -103,7 +107,7 @@ export function ProductSearchPanel() {
         onChange={(e) => setSearch(e.target.value)}
         onKeyDown={handleSearchKeyDown}
         allowClear
-        style={{ fontSize: 15 }}
+        style={{ fontSize: isMobile ? 13 : 15 }}
       />
 
       {/* Product Grid */}
@@ -133,17 +137,17 @@ export function ProductSearchPanel() {
                       <img
                         alt={product.name}
                         src={product.image_url}
-                        style={{ height: 90, objectFit: 'cover' }}
+                        style={{ height: isMobile ? 70 : 90, objectFit: 'cover' }}
                       />
                     ) : (
                       <div
                         style={{
-                          height: 90,
+                          height: isMobile ? 70 : 90,
                           background: 'linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          fontSize: 32,
+                          fontSize: isMobile ? 24 : 32,
                         }}
                       >
                         📦

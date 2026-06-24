@@ -11,6 +11,7 @@ import {
   Progress,
   Badge,
   Divider,
+  Grid,
 } from 'antd'
 import {
   ShoppingOutlined,
@@ -38,6 +39,8 @@ const COLORS = {
 
 export default function DashboardPage() {
   const { data: stats, isLoading, error } = useDashboard()
+  const screens = Grid.useBreakpoint()
+  const isMobile = screens.md === false
 
   if (isLoading) {
     return (
@@ -69,13 +72,14 @@ export default function DashboardPage() {
       title: 'Mã đơn',
       dataIndex: 'id',
       key: 'id',
-      width: 100,
+      width: 90,
       render: (id: string) => <Text code>{shortId(id)}</Text>,
     },
     {
       title: 'Thời gian',
       dataIndex: 'created_at',
       key: 'created_at',
+      width: 130,
       render: (d: string) => <Text type="secondary" style={{ fontSize: 12 }}>{formatDateTime(d)}</Text>,
     },
     {
@@ -83,6 +87,7 @@ export default function DashboardPage() {
       dataIndex: 'total_price',
       key: 'total_price',
       align: 'right' as const,
+      width: 110,
       render: (v: number) => (
         <Text strong style={{ color: COLORS.revenue }}>{formatCurrency(v)}</Text>
       ),
@@ -105,6 +110,7 @@ export default function DashboardPage() {
       title: 'Tên sản phẩm',
       dataIndex: 'product_name',
       key: 'product_name',
+      ellipsis: true,
       render: (name: string) => <Text strong>{name}</Text>,
     },
     {
@@ -112,6 +118,7 @@ export default function DashboardPage() {
       dataIndex: 'total_sold',
       key: 'total_sold',
       align: 'center' as const,
+      width: 80,
       render: (v: number) => <Tag color="blue">{v}</Tag>,
     },
     {
@@ -119,6 +126,7 @@ export default function DashboardPage() {
       dataIndex: 'total_revenue',
       key: 'total_revenue',
       align: 'right' as const,
+      width: 120,
       render: (v: number) => (
         <Text strong style={{ color: COLORS.revenue }}>{formatCurrency(v)}</Text>
       ),
@@ -126,16 +134,20 @@ export default function DashboardPage() {
   ]
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 12 : 16 }}>
       {/* Hàng 1: Doanh thu hôm nay + tháng này */}
-      <Row gutter={[16, 16]}>
+      <Row gutter={isMobile ? [12, 12] : [16, 16]}>
         <Col xs={24} sm={12} lg={6}>
-          <Card variant="borderless" style={{ borderRadius: 10, borderLeft: `4px solid ${COLORS.revenue}` }}>
+          <Card
+            variant="borderless"
+            style={{ borderRadius: 10, borderLeft: `4px solid ${COLORS.revenue}` }}
+            size={isMobile ? 'small' : 'default'}
+          >
             <Statistic
               title={<Text strong>💰 Doanh thu hôm nay</Text>}
               value={stats.todayRevenue}
               formatter={(v) => formatCurrency(Number(v))}
-              valueStyle={{ color: COLORS.revenue, fontSize: 22 }}
+              valueStyle={{ color: COLORS.revenue, fontSize: isMobile ? 18 : 22 }}
               prefix={<RiseOutlined />}
             />
             <Text type="secondary" style={{ fontSize: 12 }}>
@@ -145,12 +157,16 @@ export default function DashboardPage() {
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card variant="borderless" style={{ borderRadius: 10, borderLeft: `4px solid ${COLORS.orders}` }}>
+          <Card
+            variant="borderless"
+            style={{ borderRadius: 10, borderLeft: `4px solid ${COLORS.orders}` }}
+            size={isMobile ? 'small' : 'default'}
+          >
             <Statistic
               title={<Text strong>📅 Doanh thu tháng này</Text>}
               value={stats.monthRevenue}
               formatter={(v) => formatCurrency(Number(v))}
-              valueStyle={{ color: COLORS.orders, fontSize: 22 }}
+              valueStyle={{ color: COLORS.orders, fontSize: isMobile ? 18 : 22 }}
               prefix={<DollarOutlined />}
             />
             <Text type="secondary" style={{ fontSize: 12 }}>
@@ -160,12 +176,16 @@ export default function DashboardPage() {
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card variant="borderless" style={{ borderRadius: 10, borderLeft: `4px solid ${COLORS.stock}` }}>
+          <Card
+            variant="borderless"
+            style={{ borderRadius: 10, borderLeft: `4px solid ${COLORS.stock}` }}
+            size={isMobile ? 'small' : 'default'}
+          >
             <Statistic
               title={<Text strong>📦 Tổng sản phẩm</Text>}
               value={stats.totalProducts}
               suffix="loại"
-              valueStyle={{ color: COLORS.stock, fontSize: 22 }}
+              valueStyle={{ color: COLORS.stock, fontSize: isMobile ? 18 : 22 }}
               prefix={<ShoppingOutlined />}
             />
             <Text type="secondary" style={{ fontSize: 12 }}>
@@ -175,14 +195,18 @@ export default function DashboardPage() {
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card variant="borderless" style={{ borderRadius: 10, borderLeft: `4px solid ${COLORS.danger}` }}>
+          <Card
+            variant="borderless"
+            style={{ borderRadius: 10, borderLeft: `4px solid ${COLORS.danger}` }}
+            size={isMobile ? 'small' : 'default'}
+          >
             <Statistic
               title={<Text strong>⚠️ Hàng sắp / hết</Text>}
               value={stats.lowStockCount + stats.outOfStockCount}
               suffix="sản phẩm"
               valueStyle={{
                 color: stats.outOfStockCount > 0 ? COLORS.danger : COLORS.warning,
-                fontSize: 22,
+                fontSize: isMobile ? 18 : 22,
               }}
               prefix={<WarningOutlined />}
             />
@@ -195,11 +219,12 @@ export default function DashboardPage() {
       </Row>
 
       {/* Hàng 2: Giá trị kho + cảnh báo */}
-      <Row gutter={[16, 16]}>
+      <Row gutter={isMobile ? [12, 12] : [16, 16]}>
         <Col xs={24} md={12}>
           <Card
             variant="borderless"
             style={{ borderRadius: 10 }}
+            size={isMobile ? 'small' : 'default'}
             title={
               <span>
                 <InboxOutlined style={{ color: COLORS.stock, marginRight: 8 }} />
@@ -207,17 +232,19 @@ export default function DashboardPage() {
               </span>
             }
           >
-            <div style={{ textAlign: 'center', padding: '8px 0' }}>
-              <Title level={2} style={{ color: COLORS.stock, margin: '0 0 4px 0' }}>
+            <div style={{ textAlign: 'center', padding: isMobile ? '4px 0' : '8px 0' }}>
+              <Title level={isMobile ? 3 : 2} style={{ color: COLORS.stock, margin: '0 0 4px 0' }}>
                 {formatCurrency(stats.totalInventoryValue)}
               </Title>
-              <Text type="secondary">Tổng giá trị hàng hóa hiện có trong kho (theo giá bán)</Text>
+              <Text type="secondary" style={{ fontSize: isMobile ? 12 : 14 }}>
+                Tổng giá trị hàng hóa hiện có trong kho (theo giá bán)
+              </Text>
             </div>
-            <Divider style={{ margin: '16px 0 12px' }} />
+            <Divider style={{ margin: isMobile ? '12px 0 8px' : '16px 0 12px' }} />
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                <Text>Tỷ lệ hàng cần nhập thêm</Text>
-                <Text strong style={{ color: lowStockRate > 20 ? COLORS.danger : COLORS.revenue }}>
+                <Text style={{ fontSize: isMobile ? 12 : 14 }}>Tỷ lệ hàng cần nhập thêm</Text>
+                <Text strong style={{ fontSize: isMobile ? 12 : 14, color: lowStockRate > 20 ? COLORS.danger : COLORS.revenue }}>
                   {lowStockRate}%
                 </Text>
               </div>
@@ -232,7 +259,11 @@ export default function DashboardPage() {
                   style={{ marginTop: 10 }}
                   type="warning"
                   showIcon
-                  title={`Có ${stats.lowStockCount + stats.outOfStockCount} sản phẩm cần nhập hàng gấp!`}
+                  message={
+                    <span style={{ fontSize: isMobile ? 12 : 14 }}>
+                      Có {stats.lowStockCount + stats.outOfStockCount} sản phẩm cần nhập hàng gấp!
+                    </span>
+                  }
                 />
               )}
             </div>
@@ -243,6 +274,7 @@ export default function DashboardPage() {
           <Card
             variant="borderless"
             style={{ borderRadius: 10 }}
+            size={isMobile ? 'small' : 'default'}
             title={
               <span>
                 <ClockCircleOutlined style={{ color: COLORS.orders, marginRight: 8 }} />
@@ -260,7 +292,8 @@ export default function DashboardPage() {
                 dataSource={stats.recentOrders}
                 rowKey="id"
                 pagination={false}
-                size="small"
+                size={isMobile ? "small" : "middle"}
+                scroll={{ x: 330 }}
               />
             )}
           </Card>
@@ -268,20 +301,23 @@ export default function DashboardPage() {
       </Row>
 
       {/* Hàng 3: Top sản phẩm bán chạy tháng này */}
-      <Row gutter={[16, 16]}>
+      <Row gutter={isMobile ? [12, 12] : [16, 16]}>
         <Col xs={24}>
           <Card
             variant="borderless"
             style={{ borderRadius: 10 }}
+            size={isMobile ? 'small' : 'default'}
             title={
-              <span>
-                <FireOutlined style={{ color: '#ff4d4f', marginRight: 8 }} />
-                Top sản phẩm bán chạy tháng này
+              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
+                <span>
+                  <FireOutlined style={{ color: '#ff4d4f', marginRight: 8 }} />
+                  Top sản phẩm bán chạy
+                </span>
                 <Badge
                   count="Tháng này"
-                  style={{ background: COLORS.orders, marginLeft: 10, fontSize: 11 }}
+                  style={{ background: COLORS.orders, fontSize: 11 }}
                 />
-              </span>
+              </div>
             }
           >
             {stats.topProducts.length === 0 ? (
@@ -294,7 +330,8 @@ export default function DashboardPage() {
                 dataSource={stats.topProducts}
                 rowKey="product_name"
                 pagination={false}
-                size="middle"
+                size={isMobile ? "small" : "middle"}
+                scroll={{ x: 420 }}
               />
             )}
           </Card>
@@ -302,11 +339,12 @@ export default function DashboardPage() {
       </Row>
 
       {/* Hàng 4: Thống kê kho theo danh mục */}
-      <Row gutter={[16, 16]}>
+      <Row gutter={isMobile ? [12, 12] : [16, 16]}>
         <Col xs={24}>
           <Card
             variant="borderless"
             style={{ borderRadius: 10 }}
+            size={isMobile ? 'small' : 'default'}
             title={
               <span>
                 <ShoppingOutlined style={{ color: COLORS.stock, marginRight: 8 }} />
@@ -334,7 +372,7 @@ export default function DashboardPage() {
                   title: 'Tổng tồn kho',
                   dataIndex: 'totalStock',
                   key: 'totalStock',
-                  width: 130,
+                  width: 120,
                   align: 'right' as const,
                   render: (v: number) => (
                     <Text>{v % 1 === 0 ? v : v.toFixed(2)}</Text>
@@ -344,7 +382,7 @@ export default function DashboardPage() {
                   title: 'Giá trị kho',
                   dataIndex: 'inventoryValue',
                   key: 'inventoryValue',
-                  width: 160,
+                  width: 150,
                   align: 'right' as const,
                   render: (v: number) => (
                     <Text strong style={{ color: COLORS.stock }}>
@@ -356,7 +394,8 @@ export default function DashboardPage() {
               dataSource={stats.categoryStats}
               rowKey="category"
               pagination={false}
-              size="middle"
+              size={isMobile ? "small" : "middle"}
+              scroll={{ x: 500 }}
             />
           </Card>
         </Col>

@@ -190,26 +190,26 @@ export function ProductTable() {
   return (
     <Flex vertical style={{ width: '100%' }} gap={12}>
       {/* Toolbar */}
-      <Space wrap style={{ justifyContent: 'space-between', width: '100%' }}>
-        <Space wrap>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', flex: '1 1 auto', minWidth: 0 }}>
           <Input
             prefix={<SearchOutlined />}
             placeholder="Tìm theo tên hoặc barcode..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             allowClear
-            style={{ width: 220 }}
+            style={{ width: '100%', maxWidth: 220, minWidth: 160 }}
           />
           <Select
             value={category}
             onChange={setCategory}
-            style={{ width: 180 }}
+            style={{ width: '100%', maxWidth: 180, minWidth: 140 }}
             options={[
               { value: 'Tất cả', label: '📁 Tất cả danh mục' },
               ...PRODUCT_CATEGORIES.map((c) => ({ value: c, label: c })),
             ]}
           />
-          <Space>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap' }}>
             <Switch
               checked={lowStockOnly}
               onChange={setLowStockOnly}
@@ -217,12 +217,12 @@ export function ProductTable() {
               unCheckedChildren={<WarningOutlined />}
             />
             <Text type="secondary">Chỉ hiện sắp hết</Text>
-          </Space>
-        </Space>
-        <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
+          </div>
+        </div>
+        <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd} style={{ flexShrink: 0 }}>
           Thêm sản phẩm
         </Button>
-      </Space>
+      </div>
 
       {/* Table */}
       <Table
